@@ -9,7 +9,9 @@ import os
 from datetime import datetime
 
 app = Flask(__name__)
-
+@app.route('/')
+def home():
+    return jsonify({'message': '栖养生活健康顾问API已启动', 'status': 'ok'})
 DATA_DIR = 'data'
 USERS_FILE = os.path.join(DATA_DIR, 'users.json')
 
@@ -30,11 +32,11 @@ def save_users(users):
     with open(USERS_FILE, 'w', encoding='utf-8') as f:
         json.dump(users, f, ensure_ascii=False, indent=2)
 
-@app.route('/api/health', methods=['GET'])
+@app.route('/health', methods=['GET'])
 def health_check():
     return jsonify({'status': 'ok', 'service': '栖养生活健康顾问', 'timestamp': datetime.now().isoformat()})
 
-@app.route('/api/chat', methods=['POST'])
+@app.route('/chat', methods=['POST'])
 def chat():
     try:
         data = request.get_json()
@@ -54,7 +56,7 @@ def chat():
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
 
-@app.route('/api/user/register', methods=['POST'])
+@app.route('/user/register', methods=['POST'])
 def register_user():
     try:
         data = request.get_json()
